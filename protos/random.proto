@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option csharp_namespace = "RandomNumberGrpc";
+
+package randomService;
+
+// ---------------------------------------------------------------------------
+// Repeated (packed) encodings of the same 32-bit values.
+// ---------------------------------------------------------------------------
+
+// fixed32: always 4 bytes, byte-identical to an in-memory uint[] on little-endian
+message FixedBatch {
+  int64 startSequence = 1;
+  repeated fixed32 values = 2;
+}
+
+// uint32: varint, 1-5 bytes depending on magnitude
+message VarintBatch {
+  int64 startSequence = 1;
+  repeated uint32 values = 2;
+}
+
+// int32: varint, but negative values are sign-extended to 64 bits -> always 10 bytes
+message SignedBatch {
+  int64 startSequence = 1;
+  repeated int32 values = 2;
+}
+
+// sint32: zigzag varint, the correct choice when values can be negative
+message ZigZagBatch {
+  int64 startSequence = 1;
+  repeated sint32 values = 2;
+}
+
+// bytes: hand-packed opaque blob. Note this is a SINGULAR bytes field, not
+// `repeated bytes` -- bytes is not a packable scalar, so a repeated bytes field
+// would give every element its own tag and length prefix and no bulk copy.
+message BytesBatch {
+  int64 startSequence = 1;
+  bytes values = 2;
+}
+
+// ---------------------------------------------------------------------------
+// Singular (non-repeated) fields -- one value per message. None of the packed
+// machinery applies, so these isolate the raw per-value encoding cost.
+// ---------------------------------------------------------------------------
+
+message SingleFixed {
+  int64 sequenceNumber = 1;
+  fixed32 value = 2;
+}
+
+message SingleVarint {
+  int64 sequenceNumber = 1;
+  uint32 value = 2;
+}
+
+message SingleSigned {
+  int64 sequenceNumber = 1;
+  int32 value = 2;
+}
