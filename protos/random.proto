@@ -32,6 +32,20 @@ message ZigZagBatch {
   repeated sint32 values = 2;
 }
 
+// Unpacked mirrors of FixedBatch and VarintBatch. An unpacked repeated field
+// writes tag + value per element and carries no length prefix, which routes
+// BOTH types through protobuf's per-element writer. Comparing these two
+// isolates encoding cost with the surrounding machinery held constant.
+message UnpackedFixedBatch {
+  int64 startSequence = 1;
+  repeated fixed32 values = 2 [packed = false];
+}
+
+message UnpackedVarintBatch {
+  int64 startSequence = 1;
+  repeated uint32 values = 2 [packed = false];
+}
+
 // bytes: hand-packed opaque blob. Note this is a SINGULAR bytes field, not
 // `repeated bytes` -- bytes is not a packable scalar, so a repeated bytes field
 // would give every element its own tag and length prefix and no bulk copy.

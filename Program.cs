@@ -61,7 +61,7 @@ Console.WriteLine();
 //   EncodingBenchmarks       Serialize + Parse
 //   SingleValueBenchmarks    Singular (non-repeated) fields
 //   BatchSweepBenchmarks     Array length sweep
-//   MechanismBenchmarks      Where the ~200x comes from
+//   EmitBenchmarks           Packed vs unpacked, isolating encoding cost
 //   BoundaryCheckBenchmarks  Cache effects at large N
 //   ArrayShapeBenchmarks     bytes vs repeated fixed32
 //
@@ -75,7 +75,7 @@ BenchmarkSwitcher.FromTypes(new[]
     typeof(EncodingBenchmarks),
     typeof(SingleValueBenchmarks),
     typeof(BatchSweepBenchmarks),
-    typeof(MechanismBenchmarks),
+    typeof(EmitBenchmarks),
     typeof(BoundaryCheckBenchmarks),
     typeof(ArrayShapeBenchmarks),
 }).Run(args);

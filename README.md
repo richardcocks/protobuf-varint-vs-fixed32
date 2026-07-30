@@ -36,7 +36,7 @@ dotnet run -c Release
 | `EncodingBenchmarks` | Serialize and parse cost per value for `repeated fixed32`, `repeated uint32` (random, <128 and <16384 value ranges), `repeated int32` and `repeated sint32`, over 10,000-element arrays. | 2.5 min |
 | `SingleValueBenchmarks` | The same encodings as singular (non-`repeated`) fields, one value per message. | 1.5 min |
 | `BatchSweepBenchmarks` | Serialization cost across array lengths from 1 to 65,536, for `fixed32`, `uint32` and `int32`. | 6 min |
-| `MechanismBenchmarks` | protobuf `fixed32` serialization against a raw span copy, a deliberately misaligned span copy, per-element 4-byte stores, and a hand-written varint loop. | 1 min |
+| `EmitBenchmarks` | Packed and unpacked (`[packed = false]`) variants of `repeated fixed32` and `repeated uint32`, plus `CalculateSize` for each. Unpacked fields route both types through protobuf's per-element writer, so the pair differs only in how each value is emitted. Also includes hand-written span-copy and varint baselines, in a separate `synthetic` category, for bracketing only. | 3 min |
 | `BoundaryCheckBenchmarks` | Array lengths from 16,384 to 131,072, including 65,535 / 65,536 / 65,537. | 5 min |
 | `ArrayShapeBenchmarks` | `repeated fixed32` against a singular `bytes` field carrying the same packed payload. | 1 min |
 
