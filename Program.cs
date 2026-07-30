@@ -58,12 +58,16 @@ Console.WriteLine();
 // ---------------------------------------------------------------------------
 // Timings. Each suite corresponds to one table in the README:
 //
-//   EncodingBenchmarks       Serialize + Parse
-//   SingleValueBenchmarks    Singular (non-repeated) fields
-//   BatchSweepBenchmarks     Array length sweep
-//   EmitBenchmarks           Packed vs unpacked, isolating encoding cost
-//   BoundaryCheckBenchmarks  Cache effects at large N
-//   ArrayShapeBenchmarks     bytes vs repeated fixed32
+//   EncodingBenchmarks             Serialize + Parse
+//   RealisticSizeBenchmarks        Same, at realistic batch sizes
+//   SingleValueBenchmarks          Singular (non-repeated) fields
+//   BatchSweepBenchmarks           Array length sweep
+//   EmitBenchmarks                 Packed vs unpacked, write side
+//   ParseDecompositionBenchmarks   Packed vs unpacked, parse side
+//   AllocationByLengthBenchmarks   Allocation ratio vs array length
+//   BoundaryCheckBenchmarks        Cache effects at large N
+//   ArrayShapeBenchmarks           bytes vs repeated fixed32
+//   ProvenanceBenchmarks           Cost of populating the message
 //
 // Run one:   dotnet run -c Release -- --filter *EncodingBenchmarks*
 // Run all:   dotnet run -c Release -- --filter *
@@ -73,9 +77,13 @@ Console.WriteLine();
 BenchmarkSwitcher.FromTypes(new[]
 {
     typeof(EncodingBenchmarks),
+    typeof(RealisticSizeBenchmarks),
     typeof(SingleValueBenchmarks),
     typeof(BatchSweepBenchmarks),
     typeof(EmitBenchmarks),
+    typeof(ParseDecompositionBenchmarks),
+    typeof(AllocationByLengthBenchmarks),
     typeof(BoundaryCheckBenchmarks),
     typeof(ArrayShapeBenchmarks),
+    typeof(ProvenanceBenchmarks),
 }).Run(args);

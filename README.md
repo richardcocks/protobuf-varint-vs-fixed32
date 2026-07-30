@@ -34,11 +34,15 @@ dotnet run -c Release
 | Suite | Measures | Approx. |
 |---|---|---|
 | `EncodingBenchmarks` | Serialize and parse cost per value for `repeated fixed32`, `repeated uint32` (random, <128 and <16384 value ranges), `repeated int32` and `repeated sint32`, over 10,000-element arrays. | 2.5 min |
+| `RealisticSizeBenchmarks` | The same serialize and parse comparison at 16, 64, 256 and 1024 values per message. `int32` and `sint32` omitted. Mean is per message rather than per value. | 7 min |
 | `SingleValueBenchmarks` | The same encodings as singular (non-`repeated`) fields, one value per message. | 1.5 min |
 | `BatchSweepBenchmarks` | Serialization cost across array lengths from 1 to 65,536, for `fixed32`, `uint32` and `int32`. | 6 min |
 | `EmitBenchmarks` | Packed and unpacked (`[packed = false]`) variants of `repeated fixed32` and `repeated uint32`, plus `CalculateSize` for each. Unpacked fields route both types through protobuf's per-element writer, so the pair differs only in how each value is emitted. Also includes hand-written span-copy and varint baselines, in a separate `synthetic` category, for bracketing only. | 3 min |
+| `ParseDecompositionBenchmarks` | Parse-side counterpart to `EmitBenchmarks`: packed and unpacked variants of both types, plus merging into a pre-grown `RepeatedField` to separate growth churn from decoding. | 2 min |
+| `AllocationByLengthBenchmarks` | Parse allocation at 8,192 / 10,000 / 16,384 / 16,385 values, against the closed-form prediction `(2C - 8) / N`. | 2 min |
 | `BoundaryCheckBenchmarks` | Array lengths from 16,384 to 131,072, including 65,535 / 65,536 / 65,537. | 5 min |
 | `ArrayShapeBenchmarks` | `repeated fixed32` against a singular `bytes` field carrying the same packed payload. | 1 min |
+| `ProvenanceBenchmarks` | Cost of populating a message before serialising, from a `uint[]` and from a `byte[]`, comparing `RepeatedField` population against `UnsafeByteOperations.UnsafeWrap`. | 3 min |
 
 In every suite `fixed32` is the BenchmarkDotNet baseline, so the `Ratio` column
 is relative to it.
