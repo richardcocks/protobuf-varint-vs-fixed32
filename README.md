@@ -41,6 +41,7 @@ dotnet run -c Release
 | `ParseDecompositionBenchmarks` | Parse-side counterpart to `EmitBenchmarks`: packed and unpacked variants of both types, plus merging into a pre-grown `RepeatedField` to separate growth churn from decoding. | 2 min |
 | `AllocationByLengthBenchmarks` | Parse allocation at 8,192 / 10,000 / 16,384 / 16,385 values, against the closed-form prediction `(2C - 8) / N`. | 2 min |
 | `BoundaryCheckBenchmarks` | Array lengths from 16,384 to 131,072, including 65,535 / 65,536 / 65,537. | 5 min |
+| `ContentionBenchmarks` | Serialization on 1, 2, 4 and 8 threads at 1,000,000 values each, to show how each encoding scales when cores compete for memory bandwidth. Each invocation processes `Threads x N` values, so compare aggregate throughput rather than the Mean column. Allocates ~136 MB at 8 threads. | 4 min |
 | `ArrayShapeBenchmarks` | `repeated fixed32` against a singular `bytes` field carrying the same packed payload. | 1 min |
 | `ProvenanceBenchmarks` | Cost of populating a message before serialising, from a `uint[]` and from a `byte[]`, comparing `RepeatedField` population against `UnsafeByteOperations.UnsafeWrap`. | 3 min |
 

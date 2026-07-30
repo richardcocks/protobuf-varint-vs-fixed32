@@ -66,6 +66,7 @@ Console.WriteLine();
 //   ParseDecompositionBenchmarks   Packed vs unpacked, parse side
 //   AllocationByLengthBenchmarks   Allocation ratio vs array length
 //   BoundaryCheckBenchmarks        Cache effects at large N
+//   ContentionBenchmarks           Memory bandwidth contention across cores
 //   ArrayShapeBenchmarks           bytes vs repeated fixed32
 //   ProvenanceBenchmarks           Cost of populating the message
 //
@@ -84,6 +85,7 @@ BenchmarkSwitcher.FromTypes(new[]
     typeof(ParseDecompositionBenchmarks),
     typeof(AllocationByLengthBenchmarks),
     typeof(BoundaryCheckBenchmarks),
+    typeof(ContentionBenchmarks),
     typeof(ArrayShapeBenchmarks),
     typeof(ProvenanceBenchmarks),
 }).Run(args);
